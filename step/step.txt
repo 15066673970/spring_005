@@ -1,0 +1,29 @@
+1----------spring整合jdbc
+ 	1.spring中提供了一个可以操作数据库的对象，对象封装了jdbc技术：JDBCTemplate   JDBC模板 对象	
+ 		与DBUtils中的QueryRunner非常相似
+ 	2.准备工作
+ 	2.1	导包：4+2
+ 			spring-test
+ 			spring-aop
+ 			junit4类库
+ 			c3p0连接池
+ 			jdbc驱动
+ 			spring-jdbc
+ 			spring-tx
+ 		准备数据库
+ 			新建简单的表。t_user  id，name
+ 		测试：Demo，通过配置数据源就可以直接通过spring对jdbc模板对数据库进行操作
+ 	
+	2.2下面进行变形，使用spring对jdbcTemplate的注入并且操作jdbcTemplate的api对数据对象进行增删改查操作。
+		 User.java   UserDao.java 	UserDaoImpl.java 	application.xml 	Demo2.java		
+	2.3可以让UserDaoImpl extends JDBCDaoSupport这个类，他会根据连接池创建模板对象，就不需要自己准备
+		private  JDBCTemplate jt;了。不需要手动准备jdbc模板对象，从父类当中获得就行。
+		
+	2.4为了配合实际开发当中的需要，企业中一般将数据库的连接信息单独的配置成一个properties文件，然后在application中
+	来维护。properties文件中的键值对中的键最好不要用普通的名字，因为在spring当中很容易冲突。在applicatin中指定读取
+	外部的配置文件，
+		<context:property-placeholder location="classpath:db.properties"/>	
+	并通过value="${键}"来调用
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+	
+2----------spring中的aop事务
